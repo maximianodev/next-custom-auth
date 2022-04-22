@@ -1,8 +1,10 @@
-import type { NextPage } from "next";
+import { GetServerSideProps } from "next";
 import { FormEvent, useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { parseCookies } from "nookies";
+import { withSSRGuest } from "../../utils/withSSRGuest";
 
-const Home: NextPage = () => {
+export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,8 +17,8 @@ const Home: NextPage = () => {
       email,
       password,
     };
-    
-    await signIn(data)
+
+    await signIn(data);
   }
 
   return (
@@ -38,6 +40,10 @@ const Home: NextPage = () => {
       <button type="submit">Entrar</button>
     </form>
   );
-};
+}
 
-export default Home;
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});
